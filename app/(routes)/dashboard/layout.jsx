@@ -5,20 +5,7 @@ import DashboardHeader from "./_components/DashboardHeader";
 
 
 function DashboardLauout({ children }) {
-  // const {userId, user} = useUser()
-  // const router = useRouter()
-
-  // const checkUserBudgets = async () => {
-  //   const result = await Budget.find({clerkId: userId})
-    
-  //   if(result?.length === 0) {
-  //     router.replace('/dashboard/budgets')
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   user && checkUserBudgets
-  // }, [user])
+ 
 
   return (
     <div>

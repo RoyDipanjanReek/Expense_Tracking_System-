@@ -13,7 +13,7 @@ const expensesSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    budgetId : {
+    budgetId : {  // come from budget model clerk Id
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Budget'
     }
