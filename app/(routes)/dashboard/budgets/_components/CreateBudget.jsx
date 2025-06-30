@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-function CreateBudget() {
+function CreateBudget({refreshData}) {
   const [emojiIcon, setEmojiIcon] = useState("😊");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const [name, setName] = useState("");
@@ -27,14 +27,11 @@ function CreateBudget() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!name || !amount) return;
-
     const formData = new FormData();
     formData.append("name", name);
     formData.append("amount", amount);
     formData.append("emojiIcon", emojiIcon);
-
     try {
       const responce = await fetch("/api/create-budget", {
         method: "POST",
@@ -49,6 +46,11 @@ function CreateBudget() {
       }
 
       const data = await responce.json();
+      if(data) {
+
+        refreshData()
+        toast('New Budget Created!')
+      }
       console.log(data);
       setIsUploading(data);
       router.push("/dashboard");
@@ -83,7 +85,7 @@ function CreateBudget() {
                 >
                   {emojiIcon}
                 </Button>
-                <div className="absolute">
+                <div className="absolute z-20">
                   <EmojiPicker
                     open={openEmojiPicker}
                     onEmojiClick={(e) => {
