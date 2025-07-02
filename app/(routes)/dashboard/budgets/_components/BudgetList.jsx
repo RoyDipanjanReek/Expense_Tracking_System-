@@ -9,18 +9,15 @@ import { useAuth } from "@clerk/nextjs";
 function BudgetList() {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true); 
-  const {user} = useAuth
+  const {user} = useAuth()
     const fetchBudgetData = async () => {
       try {
         const res = await axios("/api/getData");
         console.log(res);
-        
         const data = await res.data;
-
         if (Array.isArray(data)) {
           setBudgets(data);
         } else {
-          // console.error("Unexpected response:", data);
           setBudgets([]);
         }
       } catch (err) {
@@ -43,7 +40,7 @@ function BudgetList() {
         />
 
         {budgets.map((budget, index) => (
-          <BudgetItem key={budget._id || index} budget={budget} />
+          <BudgetItem key={budget.id || index} budget={budget} />
         ))}
       </div>
     </section>

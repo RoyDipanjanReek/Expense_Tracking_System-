@@ -2,9 +2,14 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import dbConnect from "@/app/db/dbConfig";
 import Expenses from "@/app/models/Expenses.model";
-export async function GET(request, { params }) {
+import mongoose from "mongoose";
+
+export async function GET(request, context) {
   try {
+    const { params } = context;
     const { id } = await params;
+    console.log("Params id from getExpence route is:--",id);
+    
     const { userId } = await auth();
 
     if (!userId) {
@@ -16,7 +21,7 @@ export async function GET(request, { params }) {
     const getExpenseList = await Expenses.aggregate([
         {
             $match: {
-                budgetId: id
+                budgetId: new mongoose.Types.ObjectId(id)
             }
         },
         {

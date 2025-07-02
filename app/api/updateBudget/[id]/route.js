@@ -1,26 +1,25 @@
 import dbConnect from "@/app/db/dbConfig";
-import Expenses from "@/app/models/Expenses.model";
+import Budget from "@/app/models/Budget.model";
 import { auth } from "@clerk/nextjs/server";
-import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export async function POST(request, context) {
+export async function PATCH(req, context) {
   try {
     const { params } = context;
     const { id } = await params;
-    
-    console.log("Params ID is here", id);
+
     const { userId } = await auth();
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 404 });
     }
-
     await dbConnect();
 
     const formData = await request.formData();
+
     const name = formData.get("name");
     const amount = formData.get("amount");
+    const emojiIcon = formData.get("emojiIcon");
 
     if (!name || !amount) {
       return NextResponse.json(
@@ -29,18 +28,19 @@ export async function POST(request, context) {
       );
     }
 
-    const saveNewExpenses = new Expenses({
+    //Save the updated data to the database
+    const updatedBudget = new Budget({
       name,
       amount,
-      budgetId: id,
-      userId,
+      emojiIcon,
+      clerkId: userId,
     });
 
-    await saveNewExpenses.save();
+    await createdBudget.save();
 
     return NextResponse.json({
-      message: "New Expence Created Successfully",
-      data: saveNewExpenses,
+      message: "Budget Created Successfully",
+      data: createdBudget,
       success: true,
     });
   } catch (error) {

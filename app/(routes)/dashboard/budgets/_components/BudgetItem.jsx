@@ -4,6 +4,8 @@ import React from "react";
 function BudgetItem({ budget }) {
   const { name, amount, totalSpend, totalItem, emoji } = budget;
 
+  console.log("Budget name",name);
+  
   const calculateProgressBarPercent = () => {
     const percentResult = (budget.totalSpend / budget.amount)*100
 
@@ -12,7 +14,7 @@ function BudgetItem({ budget }) {
 
   return (
     <Link 
-    href={'/dashboard/expenses/'+budget._id} 
+    href={`/dashboard/expenses/${budget._id}`} 
     className="p-5 border rounded-lg gap-2 flex flex-col hover:shadow-md cursor-pointer h-[170px]">
       <div className="flex gap-2 items-center justify-between">
         <div className="flex gap-2 items-center">

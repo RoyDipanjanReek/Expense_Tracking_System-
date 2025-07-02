@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-function AddExpense({ budgetId, refreshData }) {
+function AddExpense({ id, refreshData }) {
 
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -17,7 +17,7 @@ function AddExpense({ budgetId, refreshData }) {
     formData.append("amount", amount);
 
     try {
-      const responce = await fetch(`/api/createExpense/${budgetId}`, {
+      const responce = await fetch(`/api/createExpense/${id}`, {
         method: "POST",
         body: formData,
       });
@@ -38,6 +38,7 @@ function AddExpense({ budgetId, refreshData }) {
       console.log("Failed to create budget", error);
       alert("Failed to create budget");
     }
+    
   };
   return (
     <form

@@ -10,10 +10,7 @@ export async function GET() {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
     await dbConnect();
-
-    // Use the correct field for user matching (adjust as per your Budget model)
     const getBudgetList = await Budget.aggregate([
       {
         $match: { clerkId: userId }
