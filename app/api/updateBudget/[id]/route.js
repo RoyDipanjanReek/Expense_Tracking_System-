@@ -40,7 +40,7 @@ export async function PATCH(req, context) {
 
     return NextResponse.json({
       message: "Budget Created Successfully",
-      data: createdBudget,
+      data: updatedBudget,
       success: true,
     });
   } catch (error) {

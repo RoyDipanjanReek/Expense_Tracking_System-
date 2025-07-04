@@ -3,11 +3,14 @@ import Expenses from "@/app/models/Expenses.model";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Budget from "@/app/models/Budget.model";
+import mongoose from "mongoose";
 
 export async function DELETE(req, context) {
   try {
     const { params } = context;
     const { id } = await params;
+    console.log("Delete expence data",id);
+    
     const { userId } = await auth();
 
     if (!userId) {
@@ -15,35 +18,39 @@ export async function DELETE(req, context) {
     }
     await dbConnect();
 
-    const deleteExpence = await Expenses.find({budgetId: id})
+    // const deleteExpence = await Expenses.find({budgetId: id})
 
-    await Expenses.deleteMany({budgetId: id})
+    // await Expenses.deleteMany({budgetId: id})
 
+    // const deleteBudget = await Budget.findByIdAndDelete({
+    //   _id: id
+    // });
 
-    const deleteBudget = await Budget.findByIdAndDelete({
-      _id: id
-    });
+    const deleteTotalBudgetAndExpenses = await Budget.aggregate([
+      [
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(id), 
+          },
+        },
+        {
+          $lookup: {
+            from: "expenses",
+            localField: "_id",
+            foreignField: "budgetId",
+            as: "data",
+          },
+        },
+      ],
+    ]);
 
-    // const deleteTotalBudgetAndExpenses = await Budget.aggregate([
-    //   [
-    //     {
-    //       $lookup: {
-    //         from: "expenses",
-    //         localField: "_id",
-    //         foreignField: "budgetId",
-    //         as: "data",
-    //       },
-    //     },
-    //   ],
-    // ]);
-
-    // await Budget.deleteMany({_id : {$in: deleteTotalBudgetAndExpenses}})
+    await Budget.deleteMany({ _id: { $in: deleteTotalBudgetAndExpenses } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
-          { error: error.message || "Something went wrong in getting budgets" },
-          { status: 500 }
-        );
+      { error: error.message || "Something went wrong in getting budgets" },
+      { status: 500 }
+    );
   }
 }

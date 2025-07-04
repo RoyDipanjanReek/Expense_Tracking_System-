@@ -16,25 +16,25 @@ import EmojiPicker from "emoji-picker-react";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@clerk/nextjs";
 
-function EditBudget({ budgets }) {
+function EditExpence({ budgets }) {
   const [emojiIcon, setEmojiIcon] = useState("😊");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const [name, setName] = useState(budgets?.name);
   const [amount, setAmount] = useState(budgets?.amount);
   const { user } = useUser();
 
-  const handleOnUpdateExpence = async (e) => {};
-
+  const handleOnUpdateBudgetSubmit = async (e) => {};
   return (
     <div>
       <Dialog>
         <DialogTrigger asChild>
           <Button className="flex gap-2 items-center bg-blue-600 hover:bg-blue-700 cursor-pointer">
-            <PenBox /> Edit
+            <PenBox />
+            <span className="hidden md:inline text-white">Edit</span>
           </Button>
         </DialogTrigger>
         <DialogContent>
-          <form onSubmit={handleOnUpdateExpence}>
+          <form onSubmit={handleOnUpdateBudgetSubmit}>
             <DialogHeader>
               <DialogTitle>Update Budget</DialogTitle>
               <DialogDescription>
@@ -100,4 +100,4 @@ function EditBudget({ budgets }) {
   );
 }
 
-export default EditBudget;
+export default EditExpence;

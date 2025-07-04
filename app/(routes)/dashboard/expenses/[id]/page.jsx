@@ -8,7 +8,6 @@ import { useParams } from "next/navigation";
 import ExpenseListData from "../_components/ExpenseListData";
 import { Button } from "@/components/ui/button";
 import { PenBox, Trash2 } from "lucide-react";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +20,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import EditBudget from "../_components/EditBudget";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 
 function Expences() {
   const [budgets, setBudgets] = useState(null);
@@ -29,9 +31,8 @@ function Expences() {
   const { user } = useUser();
   const params = useParams();
   const id = params.id;
-
-  // const { id } = React.use(params);
-  console.log("Budget ID:", id);
+  const router = useRouter();
+  
 
   const fetchBudgetData = async (id) => {
     try {
@@ -57,23 +58,40 @@ function Expences() {
     try {
       const res = await axios(`/api/getExpenceData/${id}`);
       const data = await res.data;
-      console.log("Expense Data:", data);
       if (Array.isArray(data)) {
         setExpence(data);
       } else {
         setExpence([]);
       }
     } catch (error) {
-      console.error("Error fetching expense data:", error);
       setExpence([]);
     }
   };
 
-  const deleteBudget = async () => {
+  /*
+  Budget Delete API comes here
+  **/
+  const deleteBudget = async (id) => {
+
+    const responce = await axios.delete(`/api/deleteBudget/${id}`)
+
+    const data = await responce.data
+    if (data.success) {
+       toast("Budget Deleted");
+       router.push("/dashboard/budgets")
+       
+    }else {
+      toast("Failed to delete Budget");
+    }
+  };
+
+  const editBudget = async () => {
     /*
-    Budget Delete API comes here
+    Budget Edit (PATCH) API comes here
     **/
   };
+
+
 
   useEffect(() => {
     if (id && user) {
@@ -87,7 +105,7 @@ function Expences() {
       <h2 className="text-2xl font-bold flex justify-between items-center">
         My Expenses
         <div className="flex gap-2 items-center">
-          <EditBudget />
+          <EditBudget budgets={budgets}/>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button className="flex gap-2 bg-destructive p-4 hover:bg-red-700 cursor-pointer">
@@ -106,7 +124,7 @@ function Expences() {
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
-                  onClick={() => deleteBudget()}
+                  onClick={() => deleteBudget(id)}
                   className="bg-red-500"
                 >
                   Continue

@@ -1,17 +1,21 @@
 'use client'
-import React, { useEffect } from "react";
+import React from "react";
 import SideNav from "./_components/SideNav";
 import DashboardHeader from "./_components/DashboardHeader";
 
 
 function DashboardLauout({ children }) {
  
-
+{/**
+  fixed hidden md:w-64 md:block
+  */}
   return (
     <div>
-      <div className="fixed hidden md:w-64 md:block">
+      {/* Sidebar */}
+      <div className="md:w-64 w-full md:fixed hidden md:block">
         <SideNav />
       </div>
+       {/* Main Content */}
       <div className="md:ml-64">
       <DashboardHeader />
       {children}

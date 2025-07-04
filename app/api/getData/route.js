@@ -29,6 +29,7 @@ export async function GET() {
           totalItem: { $size: "$expenses" }
         }
       },
+      { $sort: { createdAt: -1 } }
     ]);
     
     return NextResponse.json(getBudgetList);
