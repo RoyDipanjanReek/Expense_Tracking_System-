@@ -5,19 +5,18 @@ import Link from "next/link";
 import React from "react";
 
 function Header() {
-
-  const {user, isSignedIn} = useUser
+  const { isSignedIn } = useUser;
   return (
     <div className="p-5 flex justify-between items-center bg-amber-300 border shadow-2xl">
       <Image src={"./logo.svg"} alt="Logo" width={40} height={40} />
 
-      {isSignedIn ? 
-        <useUser/> :
-        <Link href={'/sign-in'}>
-        <Button className= "">Sign In</Button>
-        </Link> 
-      }
-      
+      {isSignedIn ? (
+        <useUser />
+      ) : (
+        <Link href={"/sign-in"}>
+          <Button className="">Sign In</Button>
+        </Link>
+      )}
     </div>
   );
 }
